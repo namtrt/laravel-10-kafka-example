@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "league/tactician": "^1.1",
+        "mateusjunges/laravel-kafka": "^1.13",
         "predis/predis": "^2.1",
         "tymon/jwt-auth": "^2.0"
     },

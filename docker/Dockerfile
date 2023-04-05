@@ -24,7 +24,6 @@ RUN apt-get update && apt-get install -y \
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Kafka
 # Install kafka extention
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -42,6 +41,14 @@ RUN apt-get update \
             && make install \
         ) \
     && rm -r /var/lib/apt/lists/*
+
+# PHP Extensions
+RUN docker-php-ext-install -j$(nproc) zip \
+    && pecl install rdkafka \
+    && docker-php-ext-enable rdkafka
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions & required packages
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip
