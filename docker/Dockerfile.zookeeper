@@ -1,0 +1,10 @@
+FROM zookeeper:latest
+
+LABEL maintainer="namtrt <thanhnam2494@gmail.com>"
+
+VOLUME /data
+VOLUME /datalog
+
+EXPOSE 2181
+
+CMD ["zkServer.sh", "start-foreground"]

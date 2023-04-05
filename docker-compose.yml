@@ -11,10 +11,10 @@ services:
       - ${DOCKER_NGINX_EXTERNAL_PORT-8000}:80
     depends_on:
       - php
-    links:
-      - php
     volumes:
       - .:/var/www/
+    networks:
+        - backend
 
   php:
     build:
@@ -27,27 +27,78 @@ services:
       - ./docker/php.ini:/usr/local/etc/php/conf.d/php.ini
     environment:
       APP_ENV: local
-    links:
-      - mysql
-      - redis
+    networks:
+        - backend
 
   redis:
       image: redis:5.0.6
       ports:
           - ${DOCKER_REDIS_EXTERNAL_PORT-6379}:6379
+      networks:
+          - backend
 
   mysql:
-    image: mysql:5.7
-    volumes:
-      - mysqldb:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: app_db
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-    ports:
-      - ${DOCKER_MYSQL_EXTERNAL_PORT-3309}:3306
-    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+      image: mysql:8.0
+      volumes:
+          - mysqldb:/var/lib/mysql
+      environment:
+          MYSQL_DATABASE: app_db
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      ports:
+          - "3309:3306"
+      command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+      networks:
+          - backend
+
+  kafka:
+      image: wurstmeister/kafka
+      ports:
+          - "9092:9092"
+      environment:
+          KAFKA_BROKER_ID: 1
+          KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092
+          KAFKA_MESSAGE_MAX_BYTES: 2000000
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      volumes:
+          - kafkaData:/kafka
+          - /var/run/docker.sock:/var/run/docker.sock
+      networks:
+          - backend
+
+  ### kafka-manager ###########################################
+  kafka-manager:
+      image: sheepkiller/kafka-manager
+      ports:
+          - "9020:9000"
+      environment:
+          ZK_HOSTS: zookeeper:2181
+      networks:
+          - backend
+
+  zookeeper:
+      build:
+          context: .
+          dockerfile: docker/Dockerfile.zookeeper
+      volumes:
+          - zookeeperData:/data
+          - zookeeperDataLog:/datalog
+      ports:
+          - "2181:2181"
+      networks:
+          - backend
 
 volumes:
     mysqldb:
         driver: local
+    kafkaData:
+        driver: local
+    zookeeperData:
+        driver: local
+    zookeeperDataLog:
+        driver: local
+
+networks:
+    backend:
+        driver: "bridge"

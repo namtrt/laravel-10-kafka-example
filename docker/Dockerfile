@@ -24,6 +24,25 @@ RUN apt-get update && apt-get install -y \
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Kafka
+# Install kafka extention
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        git \
+        zlib1g-dev \
+        unzip \
+        python \
+        && ( \
+            cd /tmp \
+            && mkdir librdkafka \
+            && cd librdkafka \
+            && git clone https://github.com/edenhill/librdkafka.git . \
+            && ./configure \
+            && make \
+            && make install \
+        ) \
+    && rm -r /var/lib/apt/lists/*
+
 # Install extensions & required packages
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
