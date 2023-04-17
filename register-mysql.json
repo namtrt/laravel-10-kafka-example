@@ -10,7 +10,7 @@
     "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
     "topic.prefix": "app-db-",
     "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
-    "schema.history.internal.kafka.topic": "schemahistory.users",
+    "schema.history.internal.kafka.topic": "schemahistory.app_db",
     "topic.creation.default.replication.factor": "1",
     "database.history.skip.unparseable.ddl": "true",
     "value.converter": "io.confluent.connect.avro.AvroConverter",
