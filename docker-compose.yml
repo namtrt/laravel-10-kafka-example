@@ -75,6 +75,9 @@ services:
         hostname: zookeeper
         ports:
             - "2181:2181"
+        volumes:
+            - zookeeperData:/var/lib/zookeeper/data
+            - zookeeperTxnLogs:/var/lib/zookeeper/log
         environment:
             ZOOKEEPER_CLIENT_PORT: 2181
             ZOOKEEPER_TICK_TIME: 2000
@@ -84,11 +87,16 @@ services:
     kafka0:
         image: confluentinc/cp-kafka:7.2.1
         hostname: kafka0
+        depends_on:
+            - mysql
+            - zookeeper
         ports:
             - "9092:9092"
             - "9997:9997"
         networks:
             - backend
+        volumes:
+            - kafkaData:/var/lib/kafka/data
         environment:
             KAFKA_BROKER_ID: 1
             KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -155,7 +163,11 @@ services:
 volumes:
     mysqldb:
         driver: local
-    kafkaUIData:
+    kafkaData:
+        driver: local
+    zookeeperData:
+        driver: local
+    zookeeperTxnLogs:
         driver: local
 
 networks:
