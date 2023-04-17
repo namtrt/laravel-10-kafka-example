@@ -1,6 +1,6 @@
 # Laravel 10 clean architechture
 
-Laravel with DDD and clean architecture
+Laravel with kafka, kafka-ui, kafka-connect, schema-registry.
 
 ## Setup & start
 #### 1. Setup Docker
@@ -54,6 +54,8 @@ php artisan test
 - command/bus: https://tactician.thephpleague.com/installation/
 - laravel-jwt https://github.com/tymondesigns/jwt-auth
 - code quality: https://getrector.com/documentation
+- kafka: https://kafka.apache.org/quickstart
+- laravel-kafka: https://github.com/mateusjunges/laravel-kafka
 
 ## Kafka Ui
 - http://localhost:8080
