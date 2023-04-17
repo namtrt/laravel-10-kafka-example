@@ -55,7 +55,5 @@ php artisan test
 - laravel-jwt https://github.com/tymondesigns/jwt-auth
 - code quality: https://getrector.com/documentation
 
-## Deploy a Debezium MySQL connector
-```bash
-curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8888/connectors/ -d @register-mysql.json
-```
+## Kafka Ui
+- http://localhost:8080
