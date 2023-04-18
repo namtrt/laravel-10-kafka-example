@@ -33,8 +33,9 @@ abstract class AbstractBaseConsumer extends Command
             topics: $arrTopic,
             groupId: $this->getGroupId(),
             brokers: $this->getBrokers()
-        )->withOption('auto.offset.reset', $this->getOffset())
-            ->usingDeserializer($deserializer);
+        )
+        ->withOption('auto.offset.reset', $this->getOffset())
+        ->usingDeserializer($deserializer);
 
         $handler = $this->handleMessage(...);
         $consumer = $consumer->withHandler(static function (ConsumedMessage $message) use ($handler) {
