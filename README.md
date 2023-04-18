@@ -59,3 +59,8 @@ php artisan test
 
 ## Kafka Ui
 - http://localhost:8080
+
+## Test Kafka Producer 
+```bash
+  php artisan kafka:test-producer
+```
