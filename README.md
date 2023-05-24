@@ -1,4 +1,4 @@
-# Laravel 10 clean architechture
+# Laravel 10 with Kafka, Kafka UI
 
 Laravel with kafka, kafka-ui, kafka-connect, schema-registry.
 
